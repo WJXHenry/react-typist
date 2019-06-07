@@ -9,6 +9,10 @@
     "node": true,
     "jasmine": true
   },
+  "plugins": [
+    "react",
+    "prettier"
+  ],
   "rules": {
     "react/prop-types": [2, {"ignore": ["children"]}],
     "eqeqeq": [2, "smart"],

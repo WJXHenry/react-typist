@@ -1,10 +1,9 @@
-import React from "react";
-import Backspace from "./Backspace";
-import Delay from "./Delay";
+import React from 'react';
+import Backspace from './Backspace';
+import Delay from './Delay';
 
-export const sleep = (val) => new Promise((resolve) => (
-  val != null ? setTimeout(resolve, val) : resolve()
-));
+export const sleep = val =>
+  new Promise(resolve => (val != null ? setTimeout(resolve, val) : resolve()));
 
 export function gaussianRnd(mean, std) {
   const times = 12;
@@ -12,14 +11,13 @@ export function gaussianRnd(mean, std) {
   for (let idx = 0; idx < times; idx++) {
     sum += Math.random();
   }
-  sum -= (times / 2);
-  return Math.round((sum) * std) + mean;
+  sum -= times / 2;
+  return Math.round(sum * std) + mean;
 }
 
 export function eachPromise(arr, iterator, ...extraArgs) {
-  const promiseReducer = (prev, current, idx) => (
-    prev.then(() => iterator(current, idx, ...extraArgs))
-  );
+  const promiseReducer = (prev, current, idx) =>
+    prev.then(() => iterator(current, idx, ...extraArgs));
   return Array.from(arr).reduce(promiseReducer, Promise.resolve());
 }
 
@@ -47,11 +45,11 @@ export function isElementType(element, component, name) {
 }
 
 export function isBackspaceElement(element) {
-  return isElementType(element, Backspace, "Backspace");
+  return isElementType(element, Backspace, 'Backspace');
 }
 
 export function isDelayElement(element) {
-  return isElementType(element, Delay, "Delay");
+  return isElementType(element, Delay, 'Delay');
 }
 
 export function extractTextFromElement(element) {
@@ -67,7 +65,7 @@ export function extractTextFromElement(element) {
         // state of the text
         lines.unshift(current);
       } else {
-        React.Children.forEach(current.props.children, (child) => {
+        React.Children.forEach(current.props.children, child => {
           stack.push(child);
         });
       }
@@ -99,7 +97,7 @@ function cloneElementWithSpecifiedTextAtIndex(element, textLines, textIdx) {
   }
 
   let idx = textIdx;
-  const recurse = (el) => {
+  const recurse = el => {
     const [child, advIdx] = cloneElementWithSpecifiedTextAtIndex(
       el,
       textLines,
@@ -109,13 +107,13 @@ function cloneElementWithSpecifiedTextAtIndex(element, textLines, textIdx) {
     return child;
   };
 
-  const isNonTypistElement = (
+  const isNonTypistElement =
     React.isValidElement(element) &&
-    !(isBackspaceElement(element) || isDelayElement(element))
-  );
+    !(isBackspaceElement(element) || isDelayElement(element));
 
   if (isNonTypistElement) {
-    const clonedChildren = React.Children.map(element.props.children, recurse) || [];
+    const clonedChildren =
+      React.Children.map(element.props.children, recurse) || [];
     return [cloneElement(element, clonedChildren), idx];
   }
 
